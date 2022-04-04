@@ -9,4 +9,7 @@
       http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd">
 
     <include file="db/changelog/202204042048_create_table_Order.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/202204042240_create_table_Product.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/202204042245_create_table_OrderProduct.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/202204042250_create_constraints_OrderProduct.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
