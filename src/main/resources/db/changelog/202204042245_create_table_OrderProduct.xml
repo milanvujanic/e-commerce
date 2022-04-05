@@ -10,10 +10,10 @@
 
     <changeSet author="milan" id="202204042245">
         <createTable tableName="order_product">
-            <column name="order_id" type="bigint">
+            <column name="orders_id" type="serial">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_order_product"/>
             </column>
-            <column name="product_id" type="bigint">
+            <column name="product_id" type="serial">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_order_product"/>
             </column>
             <column name="quantity" type="integer">
