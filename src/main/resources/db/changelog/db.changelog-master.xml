@@ -11,5 +11,8 @@
     <include file="db/changelog/202204042048_create_table_Order.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/202204042240_create_table_Product.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/202204042245_create_table_OrderProduct.xml" relativeToChangelogFile="false"/>
-    <include file="db/changelog/202204042250_create_constraints_OrderProduct.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/202204042250_create_table_ProductCategory.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/202204042255_create_constraints_OrderProduct.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/202204042300_create_constraints_Product.xml" relativeToChangelogFile="false"/>
+    <include file="db/changelog/202204042305_create_constraints_ProductCategory.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

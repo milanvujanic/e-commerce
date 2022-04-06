@@ -1,7 +1,11 @@
 package com.milan.springecommercedemo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -17,6 +21,13 @@ public class Product {
     private Double price;
 
     private String pictureUrl;
+
+    @OneToMany(mappedBy = "product")
+    @JsonManagedReference
+    List<OrderProduct> orderProducts = new ArrayList<>();
+
+    @ManyToOne
+    private ProductCategory productCategory;
 
     public Product(Long id, @NotNull(message = "Product name is required.") String name, Double price, String pictureUrl) {
         this.id = id;
@@ -58,5 +69,21 @@ public class Product {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public List<OrderProduct> getOrderProducts() {
+        return orderProducts;
+    }
+
+    public void setOrderProducts(List<OrderProduct> orderProducts) {
+        this.orderProducts = orderProducts;
+    }
+
+    public ProductCategory getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(ProductCategory productCategory) {
+        this.productCategory = productCategory;
     }
 }

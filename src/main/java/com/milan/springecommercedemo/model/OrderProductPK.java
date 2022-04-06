@@ -1,42 +1,42 @@
 package com.milan.springecommercedemo.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Embeddable
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "order")
 public class OrderProductPK implements Serializable {
 
     private static final long serialVersionUID = 476151177562655457L;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "orders_id")
-    private Order order;
+    private Long ordersId;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product product;
+    private Long productId;
 
-    public Order getOrder() {
-        return order;
+    public OrderProductPK() {
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public OrderProductPK(Long ordersId, Long productId) {
+        this.ordersId = ordersId;
+        this.productId = productId;
     }
 
-    public Product getProduct() {
-        return product;
+    public Long getOrdersId() {
+        return ordersId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setOrdersId(Long ordersId) {
+        this.ordersId = ordersId;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     @Override
@@ -44,16 +44,12 @@ public class OrderProductPK implements Serializable {
         final int prime = 31;
         int result = 1;
 
-        result = prime * result + ((order.getId() == null)
+        result = prime * result + ((ordersId == null)
           ? 0
-          : order
-            .getId()
-            .hashCode());
-        result = prime * result + ((product.getId() == null)
+          : ordersId.hashCode());
+        result = prime * result + ((productId == null)
           ? 0
-          : product
-            .getId()
-            .hashCode());
+          : productId.hashCode());
 
         return result;
     }
@@ -70,19 +66,19 @@ public class OrderProductPK implements Serializable {
             return false;
         }
         OrderProductPK other = (OrderProductPK) obj;
-        if (order == null) {
-            if (other.order != null) {
+        if (ordersId == null) {
+            if (other.ordersId != null) {
                 return false;
             }
-        } else if (!order.equals(other.order)) {
+        } else if (!(ordersId.longValue() == other.ordersId.longValue())) {
             return false;
         }
 
-        if (product == null) {
-            if (other.product != null) {
+        if (productId == null) {
+            if (other.productId != null) {
                 return false;
             }
-        } else if (!product.equals(other.product)) {
+        } else if (!(productId.longValue() == other.productId.longValue())) {
             return false;
         }
 

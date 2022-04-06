@@ -1,11 +1,9 @@
 package com.milan.springecommercedemo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 @Entity
 public class OrderProduct {
@@ -14,27 +12,46 @@ public class OrderProduct {
     @JsonIgnore
     private OrderProductPK pk;
 
+    @ManyToOne
+    @MapsId("ordersId")
+    @JoinColumn(name = "orders_id")
+    @JsonBackReference
+    private Order order;
+
+    @ManyToOne
+    @MapsId("productId")
+    @JoinColumn(name = "product_id")
+    @JsonBackReference
+    private Product product;
+
     @Column(nullable = false) private Integer quantity;
 
-    public OrderProduct() {
-        super();
-    }
+    public OrderProduct() {}
 
     public OrderProduct(Order order, Product product, Integer quantity) {
-        pk = new OrderProductPK();
-        pk.setOrder(order);
-        pk.setProduct(product);
+        this.pk = new OrderProductPK(order.getId(), product.getId());
         this.quantity = quantity;
     }
 
-    @Transient
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
     public Product getProduct() {
-        return this.pk.getProduct();
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     @Transient
     public Double getTotalPrice() {
-        return getProduct().getPrice() * getQuantity();
+        return product.getPrice() * getQuantity();
     }
 
     public OrderProductPK getPk() {

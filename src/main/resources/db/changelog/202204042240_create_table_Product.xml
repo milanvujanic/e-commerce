@@ -10,16 +10,19 @@
 
     <changeSet author="milan" id="202204042240">
         <createTable tableName="product">
-            <column name="id" type="serial">
+            <column name="id" type="bigserial">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
-            <column name="name" type="varchar(256)">
+            <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="picture_url" type="varchar(256)">
+            <column name="picture_url" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="price" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_category_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>

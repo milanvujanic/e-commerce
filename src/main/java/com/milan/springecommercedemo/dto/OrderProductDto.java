@@ -4,15 +4,24 @@ import com.milan.springecommercedemo.model.Product;
 
 public class OrderProductDto {
 
-    private Product product;
+    private Long orderId;
+    private Long productId;
     private Integer quantity;
 
-    public Product getProduct() {
-        return product;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     public Integer getQuantity() {

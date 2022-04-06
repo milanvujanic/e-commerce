@@ -8,6 +8,7 @@ import com.milan.springecommercedemo.model.OrderStatus;
 import com.milan.springecommercedemo.service.OrderProductService;
 import com.milan.springecommercedemo.service.OrderService;
 import com.milan.springecommercedemo.service.ProductService;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,26 +23,28 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api")
 public class OrderController {
 
     ProductService productService;
     OrderService orderService;
     OrderProductService orderProductService;
+    ConversionService conversionService;
 
-    public OrderController(ProductService productService, OrderService orderService, OrderProductService orderProductService) {
+    public OrderController(ProductService productService, OrderService orderService, OrderProductService orderProductService, ConversionService conversionService) {
         this.productService = productService;
         this.orderService = orderService;
         this.orderProductService = orderProductService;
+        this.conversionService = conversionService;
     }
 
-    @GetMapping
+    @GetMapping("/orders")
     @ResponseStatus(HttpStatus.OK)
     public @NotNull Iterable<Order> list() {
         return this.orderService.getAllOrders();
     }
 
-    @PostMapping
+    @PostMapping("/orders")
     public ResponseEntity<Order> create(@RequestBody OrderForm form) {
         List<OrderProductDto> formDtos = form.getProductOrders();
         validateProductsExistence(formDtos);
@@ -51,12 +54,13 @@ public class OrderController {
 
         List<OrderProduct> orderProducts = new ArrayList<>();
         for (OrderProductDto dto : formDtos) {
-            orderProducts.add(orderProductService.create(new OrderProduct(order, productService.getProduct(dto
-              .getProduct()
-              .getId()), dto.getQuantity())));
+            dto.setOrderId(order.getId());
+            OrderProduct orderProduct = conversionService.convert(dto, OrderProduct.class);
+            orderProducts.add(orderProduct);
         }
 
         order.setOrderProducts(orderProducts);
+        orderProductService.saveAll(orderProducts);
 
         this.orderService.update(order);
 
@@ -75,8 +79,7 @@ public class OrderController {
         List<OrderProductDto> list = orderProducts
           .stream()
           .filter(op -> Objects.isNull(productService.getProduct(op
-            .getProduct()
-            .getId())))
+            .getProductId())))
           .collect(Collectors.toList());
 
         if (!CollectionUtils.isEmpty(list)) {

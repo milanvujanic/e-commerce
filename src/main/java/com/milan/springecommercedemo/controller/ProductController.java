@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api")
 public class ProductController {
 
     private ProductService productService;
@@ -16,12 +16,12 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping(value = { "", "/" })
+    @GetMapping("/products")
     public @NotNull Iterable<Product> getProducts() {
         return productService.getAllProducts();
     }
 
-    @PostMapping
+    @PostMapping("/products")
     public Product createProduct(@RequestBody Product product) {
         return productService.save(product);
     }
