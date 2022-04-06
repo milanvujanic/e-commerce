@@ -1,6 +1,6 @@
 package com.milan.springecommercedemo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -27,12 +27,14 @@ public class ProductCategory {
     private String imageUrl;
 
     @OneToMany(mappedBy = "productCategory")
+    @JsonIgnore
     private Set<ProductCategory> productCategories;
 
     @ManyToOne
     private ProductCategory productCategory;
 
     @OneToMany(mappedBy = "productCategory")
+    @JsonIgnore
     private Set<Product> products = new HashSet<>();
 
     public Long getId() {
