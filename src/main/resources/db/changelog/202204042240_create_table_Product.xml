@@ -10,7 +10,7 @@
 
     <changeSet author="milan" id="202204042240">
         <createTable tableName="product">
-            <column name="id" type="bigserial">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="name" type="varchar(255)">

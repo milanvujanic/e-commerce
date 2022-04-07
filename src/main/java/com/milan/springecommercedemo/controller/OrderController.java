@@ -1,68 +1,41 @@
 package com.milan.springecommercedemo.controller;
 
-import com.milan.springecommercedemo.dto.OrderProductDto;
-import com.milan.springecommercedemo.exception.ResourceNotFoundException;
+import com.milan.springecommercedemo.dto.OrderDto;
 import com.milan.springecommercedemo.model.Order;
-import com.milan.springecommercedemo.model.OrderProduct;
-import com.milan.springecommercedemo.model.OrderStatus;
-import com.milan.springecommercedemo.service.OrderProductService;
 import com.milan.springecommercedemo.service.OrderService;
-import com.milan.springecommercedemo.service.ProductService;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
 public class OrderController {
 
-    ProductService productService;
-    OrderService orderService;
-    OrderProductService orderProductService;
-    ConversionService conversionService;
+    private final OrderService orderService;
 
-    public OrderController(ProductService productService, OrderService orderService, OrderProductService orderProductService, ConversionService conversionService) {
-        this.productService = productService;
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.orderProductService = orderProductService;
-        this.conversionService = conversionService;
     }
 
     @GetMapping("/orders")
     @ResponseStatus(HttpStatus.OK)
-    public @NotNull Iterable<Order> list() {
+    public @NotNull List<OrderDto> list() {
         return this.orderService.getAllOrders();
     }
 
+    @GetMapping("/orders/{id}")
+    public OrderDto getOrder(@PathVariable Long id) {
+        return orderService.getOrderDto(id);
+    }
+
     @PostMapping("/orders")
-    public ResponseEntity<Order> create(@RequestBody OrderForm form) {
-        List<OrderProductDto> formDtos = form.getProductOrders();
-        validateProductsExistence(formDtos);
-        Order order = new Order();
-        order.setStatus(OrderStatus.PAID.name());
-        order = this.orderService.create(order);
-
-        List<OrderProduct> orderProducts = new ArrayList<>();
-        for (OrderProductDto dto : formDtos) {
-            dto.setOrderId(order.getId());
-            OrderProduct orderProduct = conversionService.convert(dto, OrderProduct.class);
-            orderProducts.add(orderProduct);
-        }
-
-        order.setOrderProducts(orderProducts);
-        orderProductService.saveAll(orderProducts);
-
-        this.orderService.update(order);
+    public ResponseEntity<Order> create(@RequestBody OrderDto orderDto) {
+        Order order = orderService.saveOrderFromOrderDto(orderDto);
 
         String uri = ServletUriComponentsBuilder
           .fromCurrentServletMapping()
@@ -75,28 +48,4 @@ public class OrderController {
         return new ResponseEntity<>(order, headers, HttpStatus.CREATED);
     }
 
-    private void validateProductsExistence(List<OrderProductDto> orderProducts) {
-        List<OrderProductDto> list = orderProducts
-          .stream()
-          .filter(op -> Objects.isNull(productService.getProduct(op
-            .getProductId())))
-          .collect(Collectors.toList());
-
-        if (!CollectionUtils.isEmpty(list)) {
-            new ResourceNotFoundException("Product not found");
-        }
-    }
-
-    public static class OrderForm {
-
-        private List<OrderProductDto> productOrders;
-
-        public List<OrderProductDto> getProductOrders() {
-            return productOrders;
-        }
-
-        public void setProductOrders(List<OrderProductDto> productOrders) {
-            this.productOrders = productOrders;
-        }
-    }
 }

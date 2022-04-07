@@ -7,6 +7,7 @@ import com.milan.springecommercedemo.model.Product;
 import com.milan.springecommercedemo.service.OrderService;
 import com.milan.springecommercedemo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -21,13 +22,10 @@ public class OrderProductDtoToOrderProduct implements Converter<OrderProductDto,
 
     @Override
     public OrderProduct convert(OrderProductDto orderProductDto) {
-        Order order = orderService.findById(orderProductDto.getOrderId());
+        Order order = orderService.getOrder(orderProductDto.getOrderId());
         Product product = productService.getProduct(orderProductDto.getProductId());
 
-        OrderProduct orderProduct = new OrderProduct(
-                orderService.findById(orderProductDto.getOrderId()),
-                productService.getProduct(orderProductDto.getProductId()),
-                orderProductDto.getQuantity());
+        OrderProduct orderProduct = new OrderProduct(order, product, orderProductDto.getQuantity());
         orderProduct.setOrder(order);
         orderProduct.setProduct(product);
 

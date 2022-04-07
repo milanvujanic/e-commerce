@@ -1,20 +1,27 @@
 package com.milan.springecommercedemo.service;
 
+import com.milan.springecommercedemo.dto.ProductDto;
 import com.milan.springecommercedemo.model.Product;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Validated
 public interface ProductService {
 
-    @NotNull Iterable<Product> getAllProducts();
+    List<ProductDto> getAllProducts();
 
-    Product getProduct(@Min(value = 1L, message = "Invalid product ID.") long id);
+    ProductDto getProductDto(long id);
 
-    Product save(Product product);
+    Product getProduct(long id);
 
-    List<Product> findByProductCategoryId(Long id);
+    ProductDto save(ProductDto productDto);
+
+    ProductDto update(ProductDto productDto);
+
+    List<ProductDto> findByProductCategoryId(Long id);
+
+    void delete(Long id);
+
+    void deleteByProductCategoryIdIn(List<Long> ids);
 }

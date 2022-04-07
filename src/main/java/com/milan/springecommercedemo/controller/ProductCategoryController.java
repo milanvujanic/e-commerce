@@ -1,7 +1,6 @@
 package com.milan.springecommercedemo.controller;
 
 import com.milan.springecommercedemo.dto.ProductCategoryDto;
-import com.milan.springecommercedemo.model.ProductCategory;
 import com.milan.springecommercedemo.service.ProductCategoryService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.*;
@@ -13,70 +12,38 @@ import java.util.List;
 public class ProductCategoryController {
 
     private final ProductCategoryService productCategoryService;
-    private final ConversionService conversionService;
 
-    public ProductCategoryController(ProductCategoryService productCategoryService, ConversionService conversionService) {
+    public ProductCategoryController(ProductCategoryService productCategoryService) {
         this.productCategoryService = productCategoryService;
-        this.conversionService = conversionService;
     }
 
     @GetMapping("/product-categories")
-    public List<ProductCategory> getProductCategories() {
+    public List<ProductCategoryDto> getProductCategories() {        
         return productCategoryService.getAllProductCategories();
     }
 
-    @PostMapping("/product-categories")
-    public ProductCategory createProductCategory(@RequestBody ProductCategoryForm productCategoryForm) {
-        ProductCategoryDto productCategoryDto = productCategoryForm.getProductCategoryDto();
-        ProductCategory productCategory = conversionService.convert(productCategoryDto, ProductCategory.class);
-        return productCategoryService.saveProductCategory(productCategory);
+    @GetMapping("/product-category-subcategories/{id}")
+    public List<ProductCategoryDto> getProductCategorySubcategories(@PathVariable Long id) {
+        return productCategoryService.getAllCategorySubcategoriesDtos(id);
     }
 
-    public static class ProductCategoryForm {
-        private String name;
-        private String description;
-        private String imageUrl;
-        private Long parentId;
+    @GetMapping("/product-categories/{id}")
+    public ProductCategoryDto getProductCategory(@PathVariable Long id) {
+        return productCategoryService.getProductCategoryDto(id);
+    }
 
-        public ProductCategoryDto getProductCategoryDto() {
-            ProductCategoryDto productCategoryDto = new ProductCategoryDto();
-            productCategoryDto.setName(name);
-            productCategoryDto.setDescription(description);
-            productCategoryDto.setImageUrl(imageUrl);
-            productCategoryDto.setParentId(parentId);
-            return productCategoryDto;
-        }
+    @PostMapping("/product-categories")
+    public ProductCategoryDto createProductCategory(@RequestBody ProductCategoryDto productCategoryDto) {
+        return productCategoryService.saveProductCategory(productCategoryDto);
+    }
 
-        public String getName() {
-            return name;
-        }
+    @PutMapping("/product-categories")
+    public ProductCategoryDto updateProductCategory(@RequestBody ProductCategoryDto productCategoryDto) {
+        return productCategoryService.saveProductCategory(productCategoryDto);
+    }
 
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public String getImageUrl() {
-            return imageUrl;
-        }
-
-        public void setImageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
-        }
-
-        public Long getParentId() {
-            return parentId;
-        }
-
-        public void setParentId(Long parentId) {
-            this.parentId = parentId;
-        }
+    @DeleteMapping("/product-categories")
+    public void deleteProductCategory(@RequestParam Long id) {
+        productCategoryService.deleteProductCategory(id);
     }
 }
