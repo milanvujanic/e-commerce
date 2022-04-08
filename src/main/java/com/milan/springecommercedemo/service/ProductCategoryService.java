@@ -1,9 +1,11 @@
 package com.milan.springecommercedemo.service;
 
 import com.milan.springecommercedemo.dto.ProductCategoryDto;
+import com.milan.springecommercedemo.dto.ProductCategorySlimDto;
 import com.milan.springecommercedemo.model.ProductCategory;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ProductCategoryService {
 
@@ -20,4 +22,6 @@ public interface ProductCategoryService {
     List<ProductCategoryDto> getAllCategorySubcategoriesDtos(Long id);
 
     List<ProductCategory> getAllCategorySubcategories(Long id);
+
+    List<ProductCategorySlimDto> getProductSlimDtos(Set<ProductCategory> productCategories);
 }

@@ -1,23 +1,26 @@
 package com.milan.springecommercedemo.service.impl;
 
-import com.milan.springecommercedemo.dto.OrderDto;
+import com.milan.springecommercedemo.dto.OrderProductDto;
+import com.milan.springecommercedemo.dto.ProductSlimDto;
 import com.milan.springecommercedemo.model.Order;
 import com.milan.springecommercedemo.model.OrderProduct;
-import com.milan.springecommercedemo.model.OrderStatus;
 import com.milan.springecommercedemo.model.Product;
 import com.milan.springecommercedemo.repository.OrderProductRepository;
 import com.milan.springecommercedemo.service.OrderProductService;
 import com.milan.springecommercedemo.service.OrderService;
 import com.milan.springecommercedemo.service.ProductService;
-import liquibase.pro.packaged.A;
-import liquibase.pro.packaged.L;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -31,6 +34,11 @@ public class OrderProductServiceImpl implements OrderProductService {
     @Autowired
     @Lazy
     private OrderService orderService;
+
+    @Autowired
+    @Lazy
+    @Qualifier("webConversionService")
+    private ConversionService conversionService;
 
     public OrderProductServiceImpl(OrderProductRepository orderProductRepository) {
         this.orderProductRepository = orderProductRepository;
@@ -52,16 +60,46 @@ public class OrderProductServiceImpl implements OrderProductService {
     }
 
     @Override
-    public List<OrderProduct> fetchOrderProducts(Order order, List<Long> productIds, List<Integer> pruductQuantities) {
-        List<OrderProduct> orderProducts = new ArrayList<>();
-        for (int i = 0; i < productIds.size(); i++) {
-            Product product = productService.getProduct(productIds.get(i));
-            OrderProduct orderProduct = new OrderProduct(order, product, pruductQuantities.get(i));
-            orderProduct.setOrder(order);
-            orderProduct.setProduct(product);
-            orderProducts.add(orderProduct);
+    public List<OrderProductDto> findDtosByOrderId(Long orderId) {
+        return findByOrderId(orderId).stream()
+                .map(orderProduct -> conversionService.convert(orderProduct, OrderProductDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Map<String, Number>> fetchDtosMapByOrderId(Long orderId) {
+        List<OrderProductDto> orderProductDtos = findDtosByOrderId(orderId);
+        List<Map<String, Number>> orderProductDtoList = new ArrayList<>();
+        for (OrderProductDto orderProductDto : orderProductDtos) {
+            Map<String, Number> orderProductDtoMap = new HashMap<>();
+            orderProductDtoMap.put("productId", orderProductDto.getProductId());
+            orderProductDtoMap.put("quantity", orderProductDto.getQuantity());
+            orderProductDtoList.add(orderProductDtoMap);
         }
-        return orderProducts;
+        return orderProductDtoList;
+    }
+
+    @Override
+    public List<OrderProduct> fetchOrderProducts(Order order, List<ProductSlimDto> productSlimDtos) {
+        return productSlimDtos.stream()
+                .map(productSlimDto -> {
+                        Product product = productService.getProduct(productSlimDto.getId());
+                        OrderProduct orderProduct = new OrderProduct(order, product, productSlimDto.getQuantity());
+                        orderProduct.setOrder(order);
+                        orderProduct.setProduct(product);
+                        return orderProduct;
+                    }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductSlimDto> fetchOrderProductSlimDtos(Long orderId) {
+        return findDtosByOrderId(orderId).stream()
+                .map(orderProductDto -> {
+                    ProductSlimDto productSlimDto = new ProductSlimDto();
+                    productSlimDto.setId(orderProductDto.getProductId());
+                    productSlimDto.setQuantity(orderProductDto.getQuantity());
+                    return productSlimDto;
+                }).collect(Collectors.toList());
     }
 
 }

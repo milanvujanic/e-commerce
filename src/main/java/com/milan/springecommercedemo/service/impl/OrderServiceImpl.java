@@ -1,6 +1,7 @@
 package com.milan.springecommercedemo.service.impl;
 
 import com.milan.springecommercedemo.dto.OrderDto;
+import com.milan.springecommercedemo.exception.BadRequestException;
 import com.milan.springecommercedemo.model.Order;
 import com.milan.springecommercedemo.model.OrderProduct;
 import com.milan.springecommercedemo.model.OrderStatus;
@@ -14,8 +15,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.UniqueConstraint;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto create(OrderDto orderDto) {
-        orderDto.setDateCreated(LocalDate.now());
+        orderDto.setDateCreated(ZonedDateTime.now());
         Order order = orderRepository.save(conversionService.convert(orderDto, Order.class));
         orderDto.setId(order.getId());
         return orderDto;
@@ -55,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order create(Order order) {
-        order.setDateCreated(LocalDate.now());
+        order.setDateCreated(ZonedDateTime.now());
         return orderRepository.save(order);
     }
 
@@ -81,10 +81,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order saveOrderFromOrderDto(OrderDto orderDto) {
+        if (orderDto.getId() != null) {
+            throw new BadRequestException("Order's id must be null but is: id = " + orderDto.getId());
+        }
         Order order = new Order();
         order.setStatus(OrderStatus.PAID.name());
         order = create(order);
-        List<OrderProduct> orderProducts = orderProductService.fetchOrderProducts(order, orderDto.getProductIds(), orderDto.getProductQuantities());
+        List<OrderProduct> orderProducts = orderProductService.fetchOrderProducts(order, orderDto.getProducts());
 
         order.setOrderProducts(orderProducts);
         orderProductService.saveAll(orderProducts);
@@ -92,4 +95,5 @@ public class OrderServiceImpl implements OrderService {
         update(order);
         return order;
     }
+
 }

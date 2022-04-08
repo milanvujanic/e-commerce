@@ -24,4 +24,5 @@ public interface ProductService {
     void delete(Long id);
 
     void deleteByProductCategoryIdIn(List<Long> ids);
+
 }

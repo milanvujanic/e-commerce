@@ -1,16 +1,13 @@
 package com.milan.springecommercedemo.dto;
 
-import java.time.LocalDate;
-import java.util.HashMap;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Map;
 
 public class OrderDto {
     private Long id;
-    private LocalDate dateCreated;
+    private ZonedDateTime dateCreated;
     private String status;
-    private List<Long> productIds;
-    private List<Integer> productQuantities;
+    private List<ProductSlimDto> products;
     private Double totalOrderPrice;
     private int numberOfProducts;
 
@@ -22,11 +19,11 @@ public class OrderDto {
         this.id = id;
     }
 
-    public LocalDate getDateCreated() {
+    public ZonedDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDate created) {
+    public void setDateCreated(ZonedDateTime created) {
         this.dateCreated = created;
     }
 
@@ -38,20 +35,12 @@ public class OrderDto {
         this.status = status;
     }
 
-    public List<Long> getProductIds() {
-        return productIds;
+    public List<ProductSlimDto> getProducts() {
+        return products;
     }
 
-    public void setProductIds(List<Long> productIds) {
-        this.productIds = productIds;
-    }
-
-    public List<Integer> getProductQuantities() {
-        return productQuantities;
-    }
-
-    public void setProductQuantities(List<Integer> productQuantities) {
-        this.productQuantities = productQuantities;
+    public void setProducts(List<ProductSlimDto> products) {
+        this.products = products;
     }
 
     public Double getTotalOrderPrice() {

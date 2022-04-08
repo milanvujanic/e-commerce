@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +16,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
     @Column(name = "created")
-    private LocalDate dateCreated;
+    private ZonedDateTime dateCreated;
 
     @Column(name = "status")
     private String status;
@@ -26,17 +26,6 @@ public class Order {
     @JsonManagedReference
     @OneToMany(mappedBy = "order")
     private List<OrderProduct> orderProducts = new ArrayList<>();
-
-    @Transient
-    public Double getTotalOrderPrice() {
-        double sum = 0D;
-        List<OrderProduct> orderProducts = getOrderProducts();
-        for (OrderProduct op : orderProducts) {
-            sum += op.getTotalPrice();
-        }
-
-        return sum;
-    }
 
     public Long getId() {
         return id;
@@ -46,11 +35,11 @@ public class Order {
         this.id = id;
     }
 
-    public LocalDate getDateCreated() {
+    public ZonedDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDate dateCreated) {
+    public void setDateCreated(ZonedDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -70,8 +59,4 @@ public class Order {
         this.orderProducts = orderProducts;
     }
 
-    @Transient
-    public int getNumberOfProducts() {
-        return this.orderProducts.size();
-    }
 }
