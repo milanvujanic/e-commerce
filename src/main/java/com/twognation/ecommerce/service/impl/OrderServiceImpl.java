@@ -15,6 +15,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto create(OrderDto orderDto) {
-        orderDto.setDateCreated(ZonedDateTime.now());
+        orderDto.setDateCreated(OffsetDateTime.now());
         Order order = orderRepository.save(conversionService.convert(orderDto, Order.class));
         orderDto.setId(order.getId());
         return orderDto;
@@ -55,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order create(Order order) {
-        order.setDateCreated(ZonedDateTime.now());
+        order.setDateCreated(OffsetDateTime.now());
         return orderRepository.save(order);
     }
 

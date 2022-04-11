@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +15,12 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @JsonFormat(pattern = "yyyy-MM-dd@HH:mm:ss")
     @Column(name = "created")
-    private ZonedDateTime dateCreated;
+    private OffsetDateTime dateCreated;
 
     @Column(name = "status")
     private String status;
@@ -35,11 +37,11 @@ public class Order {
         this.id = id;
     }
 
-    public ZonedDateTime getDateCreated() {
+    public OffsetDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(ZonedDateTime dateCreated) {
+    public void setDateCreated(OffsetDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 

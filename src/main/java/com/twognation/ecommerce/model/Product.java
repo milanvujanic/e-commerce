@@ -12,15 +12,20 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @NotNull(message = "Product name is required.")
     @Basic(optional = false)
+    @Column(name = "name")
     private String name;
 
-    private Double price;
+    @Lob
+    @Column(name = "description")
+    private String description;
 
-    private String pictureUrl;
+    @Column(name = "price")
+    private Double price;
 
     @OneToMany(mappedBy = "product")
     @JsonManagedReference
@@ -29,11 +34,15 @@ public class Product {
     @ManyToOne
     private ProductCategory productCategory;
 
-    public Product(Long id, @NotNull(message = "Product name is required.") String name, Double price, String pictureUrl) {
+    @OneToMany(mappedBy = "product")
+    @JsonManagedReference
+    List<ProductImage> productImages = new ArrayList<>();
+
+    public Product(Long id, @NotNull(message = "Product name is required.") String name, String description, Double price) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.price = price;
-        this.pictureUrl = pictureUrl;
     }
 
     public Product() {
@@ -55,20 +64,20 @@ public class Product {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Double getPrice() {
         return price;
     }
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public String getPictureUrl() {
-        return pictureUrl;
-    }
-
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
     }
 
     public List<OrderProduct> getOrderProducts() {
@@ -85,5 +94,13 @@ public class Product {
 
     public void setProductCategory(ProductCategory productCategory) {
         this.productCategory = productCategory;
+    }
+
+    public List<ProductImage> getProductImages() {
+        return productImages;
+    }
+
+    public void setProductImages(List<ProductImage> productImages) {
+        this.productImages = productImages;
     }
 }

@@ -13,8 +13,9 @@ public class ProductToProductDto implements Converter<Product, ProductDto> {
         ProductDto productDto = new ProductDto();
         productDto.setId(product.getId());
         productDto.setName(product.getName());
+        productDto.setDescription(product.getDescription());
+        productDto.setProductImages();
         productDto.setPrice(product.getPrice());
-        productDto.setPictureUrl(product.getPictureUrl());
         productDto.setProductCategoryId(product.getProductCategory().getId());
         return productDto;
     }

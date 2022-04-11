@@ -1,11 +1,12 @@
 package com.twognation.ecommerce.dto;
 
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 public class OrderDto {
     private Long id;
-    private ZonedDateTime dateCreated;
+    private OffsetDateTime dateCreated;
     private String status;
     private List<ProductSlimDto> products;
     private Double totalOrderPrice;
@@ -19,11 +20,11 @@ public class OrderDto {
         this.id = id;
     }
 
-    public ZonedDateTime getDateCreated() {
+    public OffsetDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(ZonedDateTime created) {
+    public void setDateCreated(OffsetDateTime created) {
         this.dateCreated = created;
     }
 

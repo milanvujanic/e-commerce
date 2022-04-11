@@ -16,8 +16,8 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="picture_url" type="varchar(255)">
-                <constraints nullable="false"/>
+            <column name="description" type="clob">
+                <constraints nullable="true"/>
             </column>
             <column name="price" type="double">
                 <constraints nullable="false"/>
