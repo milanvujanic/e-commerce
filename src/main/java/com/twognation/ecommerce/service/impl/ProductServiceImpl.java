@@ -62,42 +62,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto save(ProductDto productDto) {
-        Product convert = conversionService.convert(productDto, Product.class);
-        convert = productRepository.save(convert);
-        List<ProductImage> productImages = fetchProductImagesList(productDto.getProductImages(), convert);
-        productImageService.saveAll(productImages);
-        productDto.setId(convert.getId());
+        Product product = conversionService.convert(productDto, Product.class);
+        product = productRepository.save(product);
+        productDto.setId(product.getId());
         return productDto;
     }
 
     @Override
-    public List<ProductImage> fetchProductImagesList(Map<String, List<ProductImageDto>> productImages, Product product) {
-        return productImages.keySet().stream()
-                .flatMap(key -> productImages.get(key).stream())
-                .map(productImageDto -> {
-                    ProductImage productImage = conversionService.convert(productImageDto, ProductImage.class);
-                    productImage.setProduct(product);
-                    return productImage;
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Map<String, List<ProductImageDto>> fetchProductImagesMap(List<ProductImage> productImages) {
-        Map<String, List<ProductImageDto>> productImageDtosMap = new HashMap<>();
-        for (ProductImage productImage : productImages) {
-            if (productImage.getSmallImage() != null)
-        }
-
-    }
-
-    @Override
     public ProductDto update(ProductDto productDto) {
-        Product convert = conversionService.convert(productDto, Product.class);
-        convert = productRepository.save(convert);
-        List<ProductImage> productImages = fetchProductImagesList(productDto.getProductImages(), convert);
-        productImageService.deleteByProductId(productDto.getId());
-        productImageService.saveAll(productImages);
+        Product product = conversionService.convert(productDto, Product.class);
+        product = productRepository.save(product);
+        productDto.setId(product.getId());
         return productDto;
     }
 

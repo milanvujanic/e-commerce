@@ -29,7 +29,7 @@ public class ProductDtoToProduct implements Converter<ProductDto, Product> {
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
         product.setProductCategory(productCategoryService.getProductCategory(productDto.getProductCategoryId()));
-        product.setProductImages(productService.fetchProductImagesList(productDto.getProductImages(), product));
+        product.setProductImages(productImageService.fetchProductImagesList(productDto.getProductImages(), product));
         return product;
     }
 }

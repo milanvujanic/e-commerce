@@ -13,8 +13,8 @@ public class ProductImageToProductImageDto implements Converter<ProductImage, Pr
         ProductImageDto productImageDto = new ProductImageDto();
         productImageDto.setId(productImage.getId());
         productImageDto.setProductId(productImage.getId());
-        productImageDto.setSmallImage(productImage.getSmallImage());
-        productImageDto.setLargeImage(productImage.getLargeImage());
+        productImageDto.setImageSizeId(productImage.getImageSize().getId());
+        productImageDto.setImage(productImage.getImage());
         productImageDto.setOrdinalNumber(productImage.getOrdinalNumber());
         productImageDto.setImageFormat(productImage.getImageFormat());
         return productImageDto;

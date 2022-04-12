@@ -1,6 +1,7 @@
 package com.twognation.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
@@ -9,15 +10,13 @@ import javax.persistence.*;
 public class ProductImage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="sequenceGenerator")
+    @SequenceGenerator(name="sequenceGenerator", allocationSize = 100)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "small_image")
-    private String smallImage;
-
-    @Column(name = "large_image")
-    private String largeImage;
+    @Column(name = "image")
+    private String image;
 
     @Column(name = "ordinal_number")
     private Integer ordinalNumber;
@@ -30,6 +29,11 @@ public class ProductImage {
     @JsonBackReference
     private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "image_size_id")
+    @JsonManagedReference
+    private ImageSize imageSize;
+
     public Long getId() {
         return id;
     }
@@ -38,20 +42,12 @@ public class ProductImage {
         this.id = id;
     }
 
-    public String getSmallImage() {
-        return smallImage;
+    public String getImage() {
+        return image;
     }
 
-    public void setSmallImage(String smallImage) {
-        this.smallImage = smallImage;
-    }
-
-    public String getLargeImage() {
-        return largeImage;
-    }
-
-    public void setLargeImage(String largeImage) {
-        this.largeImage = largeImage;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Integer getOrdinalNumber() {
@@ -76,5 +72,13 @@ public class ProductImage {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public ImageSize getImageSize() {
+        return imageSize;
+    }
+
+    public void setImageSize(ImageSize imageSize) {
+        this.imageSize = imageSize;
     }
 }

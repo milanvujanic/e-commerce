@@ -3,8 +3,8 @@ package com.twognation.ecommerce.dto;
 public class ProductImageDto {
     private Long id;
     private Long productId;
-    private String smallImage;
-    private String largeImage;
+    private Long imageSizeId;
+    private String image;
     private Integer ordinalNumber;
     private String imageFormat;
 
@@ -24,20 +24,20 @@ public class ProductImageDto {
         this.productId = productId;
     }
 
-    public String getSmallImage() {
-        return smallImage;
+    public Long getImageSizeId() {
+        return imageSizeId;
     }
 
-    public void setSmallImage(String smallImage) {
-        this.smallImage = smallImage;
+    public void setImageSizeId(Long imageSizeId) {
+        this.imageSizeId = imageSizeId;
     }
 
-    public String getLargeImage() {
-        return largeImage;
+    public String getImage() {
+        return image;
     }
 
-    public void setLargeImage(String largeImage) {
-        this.largeImage = largeImage;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Integer getOrdinalNumber() {

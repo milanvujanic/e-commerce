@@ -20,10 +20,6 @@ public interface ProductService {
 
     ProductDto save(ProductDto productDto);
 
-    List<ProductImage> fetchProductImagesList(Map<String, List<ProductImageDto>> productImages, Product product);
-
-    Map<String, List<ProductImageDto>> fetchProductImagesMap(List<ProductImage> productImages);
-
     ProductDto update(ProductDto productDto);
 
     List<ProductDto> findByProductCategoryId(Long id);

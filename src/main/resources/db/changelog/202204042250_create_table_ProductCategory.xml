@@ -10,7 +10,7 @@
 
     <changeSet author="milan" id="202204061245">
         <createTable tableName="product_category">
-            <column name="id" type="bigint" autoIncrement="true">
+            <column name="id" type="bigint" autoIncrement="false">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="name" type="varchar(255)">
