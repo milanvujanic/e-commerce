@@ -12,8 +12,8 @@ import java.util.Set;
 public class ProductCategory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="sequenceGenerator")
-    @SequenceGenerator(name="sequenceGenerator", allocationSize = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="productCategorySequence")
+    @SequenceGenerator(name="productCategorySequence", sequenceName = "product_category_sequence", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
@@ -21,6 +21,7 @@ public class ProductCategory {
     @NotBlank
     private String name;
 
+    @Lob
     @Column(name = "description")
     private String description;
 

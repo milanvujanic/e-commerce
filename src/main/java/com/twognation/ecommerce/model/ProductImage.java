@@ -1,7 +1,6 @@
 package com.twognation.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
@@ -10,13 +9,19 @@ import javax.persistence.*;
 public class ProductImage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="sequenceGenerator")
-    @SequenceGenerator(name="sequenceGenerator", allocationSize = 100)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="productImageSequence")
+    @SequenceGenerator(name="productImageSequence", sequenceName = "product_image_sequence", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "image")
-    private String image;
+    @Column(name = "small_image")
+    private String smallImage;
+
+    @Column(name = "large_image")
+    private String largeImage;
+
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "ordinal_number")
     private Integer ordinalNumber;
@@ -29,11 +34,6 @@ public class ProductImage {
     @JsonBackReference
     private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "image_size_id")
-    @JsonManagedReference
-    private ImageSize imageSize;
-
     public Long getId() {
         return id;
     }
@@ -42,12 +42,28 @@ public class ProductImage {
         this.id = id;
     }
 
-    public String getImage() {
-        return image;
+    public String getSmallImage() {
+        return smallImage;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setSmallImage(String smallImage) {
+        this.smallImage = smallImage;
+    }
+
+    public String getLargeImage() {
+        return largeImage;
+    }
+
+    public void setLargeImage(String largeImage) {
+        this.largeImage = largeImage;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Integer getOrdinalNumber() {
@@ -74,11 +90,4 @@ public class ProductImage {
         this.product = product;
     }
 
-    public ImageSize getImageSize() {
-        return imageSize;
-    }
-
-    public void setImageSize(ImageSize imageSize) {
-        this.imageSize = imageSize;
-    }
 }

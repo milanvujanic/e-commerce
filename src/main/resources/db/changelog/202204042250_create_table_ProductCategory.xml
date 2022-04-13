@@ -17,11 +17,13 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="clob"/>
-            <column name="image_url" type="clob"/>
+            <column name="image_url" type="varchar(255)"/>
             <column name="product_category_id" type="bigint">
                 <constraints nullable="true"/>
             </column>
         </createTable>
+
+        <createSequence sequenceName="product_category_sequence" startValue="1" incrementBy="1"/>
     </changeSet>
 
 </databaseChangeLog>

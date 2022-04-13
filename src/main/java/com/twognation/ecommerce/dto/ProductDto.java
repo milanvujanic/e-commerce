@@ -1,5 +1,6 @@
 package com.twognation.ecommerce.dto;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,7 +8,7 @@ public class ProductDto {
     private Long id;
     private String name;
     private String description;
-    private Map<String, List<ProductImageDto>> productImages;
+    private List<ProductImageDto> productImages;
     private Double price;
     private Long productCategoryId;
 
@@ -35,11 +36,11 @@ public class ProductDto {
         this.description = description;
     }
 
-    public Map<String, List<ProductImageDto>> getProductImages() {
+    public List<ProductImageDto> getProductImages() {
         return productImages;
     }
 
-    public void setProductImages(Map<String, List<ProductImageDto>> productImages) {
+    public void setProductImages(List<ProductImageDto> productImages) {
         this.productImages = productImages;
     }
 

@@ -1,5 +1,7 @@
 package com.twognation.ecommerce.service.impl;
 
+import com.cloudinary.utils.ObjectUtils;
+import com.twognation.ecommerce.config.CloudinaryConfig;
 import com.twognation.ecommerce.dto.ProductImageDto;
 import com.twognation.ecommerce.exception.ResourceNotFoundException;
 import com.twognation.ecommerce.model.Product;
@@ -13,10 +15,13 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +44,9 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Qualifier("webConversionService")
     private ConversionService conversionService;
 
+    @Autowired
+    private CloudinaryConfig cloudinaryConfig;
+
     public ProductImageServiceImpl(Environment environment) {
         this.environment = environment;
     }
@@ -54,7 +62,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     public ProductImageDto findProductImageDtoByProductIdAndOrdinalNumber(Long id, Integer ordinalNumber) {
         return productImageRepository.findByProduct_IdAndOrdinalNumber(id, ordinalNumber)
                 .map(productImage -> conversionService.convert(productImage, ProductImageDto.class))
-                .orElseThrow(() -> new ResourceNotFoundException("ProductImageNotFoune not found: productId = " + id + ", ordinalNumber = " + ordinalNumber));
+                .orElseThrow(() -> new ResourceNotFoundException("ProductImage not found: productId = " + id + ", ordinalNumber = " + ordinalNumber));
     }
 
     @Override
@@ -112,14 +120,44 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public List<ProductImage> fetchProductImagesList(Map<String, List<ProductImageDto>> productImages, Product product) {
-        return productImages.keySet().stream()
-                .flatMap(key -> productImages.get(key).stream())
+    public List<ProductImage> fetchProductImagesList(List<ProductImageDto> productImages, Product product) {
+        return productImages.stream()
                 .map(productImageDto -> {
                     ProductImage productImage = conversionService.convert(productImageDto, ProductImage.class);
                     productImage.setProduct(product);
                     return productImage;
                 })
                 .collect(Collectors.toList());
+    }
+    @Override
+    public List<ProductImageDto> saveProductImagesToCloudinary(MultipartFile[] smallImageFiles,
+                                                               MultipartFile[] largeImageFiles,
+                                                               List<ProductImageDto> productImageDtos) {
+        List<ProductImageDto> productImageDtoList = populateProductImageDtos(smallImageFiles, largeImageFiles, productImageDtos);
+        for (ProductImageDto productImageDto : productImageDtoList) {
+            try {
+                Map uploadResultSmall = cloudinaryConfig.upload(productImageDto.getSmallImageFile().getBytes(), ObjectUtils.asMap("resourcetype", "auto", "folder", "e-commerce-test"));
+                productImageDto.setSmallImage(uploadResultSmall.get("url").toString());
+                productImageDto.setSmallImageFile(null);
+                Map uploadResultLarge = cloudinaryConfig.upload(productImageDto.getLargeImageFile().getBytes(), ObjectUtils.asMap("resourcetype", "auto", "folder", "e-commerce-test"));
+                productImageDto.setLargeImage(uploadResultLarge.get("url").toString());
+                productImageDto.setLargeImageFile(null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return productImageDtoList;
+    }
+
+    private List<ProductImageDto> populateProductImageDtos(MultipartFile[] smallImageFiles,
+                                                           MultipartFile[] largeImageFiles,
+                                                           List<ProductImageDto> productImageDtos) {
+
+        for (int i = 0; i < productImageDtos.size(); i++) {
+            productImageDtos.get(i).setSmallImageFile(smallImageFiles[i]);
+            productImageDtos.get(i).setLargeImageFile(largeImageFiles[i]);
+        }
+
+        return productImageDtos;
     }
 }

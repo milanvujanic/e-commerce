@@ -2,11 +2,10 @@ package com.twognation.ecommerce.controller;
 
 import com.twognation.ecommerce.dto.ProductImageDto;
 import com.twognation.ecommerce.service.ProductImageService;
-import liquibase.pro.packaged.R;
-import org.springframework.boot.web.reactive.context.ReactiveWebApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,9 +26,14 @@ public class ProductImageController {
     }
 
     @PostMapping("/product-images")
-    public ResponseEntity<Void> saveProductImages(@RequestBody List<ProductImageDto> productImageDtos) {
-        productImageService.saveAllDtos(productImageDtos);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<List<ProductImageDto>> saveProductImages(@RequestParam("small_image") MultipartFile[] smallImageFiles,
+                                                  @RequestParam("large_image") MultipartFile[] largeImageFiles,
+                                                  @RequestParam("productImageDtos") List<ProductImageDto> productImageDtos) {
+
+        List<ProductImageDto> productImageDtoList = productImageService.saveProductImagesToCloudinary(smallImageFiles, largeImageFiles, productImageDtos);
+
+//        productImageService.saveAllDtos(productImageDtos);
+        return new ResponseEntity<>(productImageDtoList, HttpStatus.OK);
     }
 
     @PutMapping("/product-images")

@@ -16,7 +16,5 @@
     <include file="db/changelog/202204042300_create_constraints_Product.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/202204042305_create_constraints_ProductCategory.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/202204111525_create_table_ProductImage.xml" relativeToChangelogFile="false"/>
-    <include file="db/changelog/202204121420_create_table_ImageSize.xml" relativeToChangelogFile="false"/>
     <include file="db/changelog/202204121425_create_constraints_ProductImage.xml" relativeToChangelogFile="false"/>
-    <include file="db/changelog/202204121510_load_data_ImageSize.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

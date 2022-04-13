@@ -3,9 +3,9 @@ package com.twognation.ecommerce.service;
 import com.twognation.ecommerce.dto.ProductImageDto;
 import com.twognation.ecommerce.model.Product;
 import com.twognation.ecommerce.model.ProductImage;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ProductImageService {
     List<ProductImageDto> findByProductDtosByProductId(Long id);
@@ -16,5 +16,9 @@ public interface ProductImageService {
     void saveAllDtos(List<ProductImageDto> productImageDtos);
     void deleteByProductId(Long id);
     void batchUpdateProductImages(List<ProductImageDto> productImageDtos);
-    List<ProductImage> fetchProductImagesList(Map<String, List<ProductImageDto>> productImages, Product product);
+    List<ProductImage> fetchProductImagesList(List<ProductImageDto> productImages, Product product);
+
+    public List<ProductImageDto> saveProductImagesToCloudinary(MultipartFile[] smallImageFiles,
+                                                               MultipartFile[] largeImageFiles,
+                                                               List<ProductImageDto> productImageDtos);
 }

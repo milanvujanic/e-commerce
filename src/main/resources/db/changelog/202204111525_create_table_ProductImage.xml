@@ -16,8 +16,11 @@
             <column name="small_image" type="varchar(255)">
                 <constraints nullable="true"/>
             </column>
-            <column name="image" type="varchar(255)">
-                <constraints nullable="false"/>
+            <column name="large_image" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="true"/>
             </column>
             <column name="image_format" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -25,10 +28,9 @@
             <column name="product_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="image_size_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
+
+        <createSequence sequenceName="product_image_sequence" startValue="1" incrementBy="1"/>
     </changeSet>
 
 </databaseChangeLog>

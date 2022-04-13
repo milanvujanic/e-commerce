@@ -1,10 +1,17 @@
 package com.twognation.ecommerce.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class ProductImageDto {
     private Long id;
     private Long productId;
-    private Long imageSizeId;
-    private String image;
+    private String smallImage;
+
+    private MultipartFile smallImageFile;
+    private String largeImage;
+
+    private MultipartFile largeImageFile;
+    private String title;
     private Integer ordinalNumber;
     private String imageFormat;
 
@@ -24,20 +31,44 @@ public class ProductImageDto {
         this.productId = productId;
     }
 
-    public Long getImageSizeId() {
-        return imageSizeId;
+    public String getSmallImage() {
+        return smallImage;
     }
 
-    public void setImageSizeId(Long imageSizeId) {
-        this.imageSizeId = imageSizeId;
+    public void setSmallImage(String smallImage) {
+        this.smallImage = smallImage;
     }
 
-    public String getImage() {
-        return image;
+    public MultipartFile getSmallImageFile() {
+        return smallImageFile;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setSmallImageFile(MultipartFile smallImageFile) {
+        this.smallImageFile = smallImageFile;
+    }
+
+    public String getLargeImage() {
+        return largeImage;
+    }
+
+    public void setLargeImage(String largeImage) {
+        this.largeImage = largeImage;
+    }
+
+    public MultipartFile getLargeImageFile() {
+        return largeImageFile;
+    }
+
+    public void setLargeImageFile(MultipartFile largeImageFile) {
+        this.largeImageFile = largeImageFile;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Integer getOrdinalNumber() {
